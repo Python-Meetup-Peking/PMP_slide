@@ -1,0 +1,29 @@
+ul.mylist {
+  margin: 0;
+  list-style-type: none;
+}
+span.cross {
+  content: "✕";
+  color: red;
+  font-family: "DejaVu Sans";
+}
+span.check {
+  content: "✓";
+  color: green;
+  font-family: "DejaVu Sans";
+}
+
+h3 {
+  text-transform: none !important;
+}
+
+mark {
+  background-color: rgba(0, 128, 0, 0.4);
+  color: inherit;
+}
+
+.gray {
+  color: gray;
+}
+
+/* vim:se fdm=marker fmr={,}: */

@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = ../reveal.js
+	branch = asyncio
+	commit = b0234bd32bd691d4f5d1cc9120d388b0f0186905
+	parent = none
+	cmdver = 0.3.1

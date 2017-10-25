@@ -1,0 +1,26 @@
+env:
+  es6: true
+  browser: true
+globals: Reveal
+extends: 'eslint:recommended'
+parser: babel-eslint
+parserOptions:
+  sourceType: module
+rules:
+  indent:
+    - off
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - single
+  semi:
+    - error
+    - never
+  no-console:
+    - off
+  no-unused-vars:
+    - warn
+    - varsIgnorePattern: ^_
+      argsIgnorePattern: ^_

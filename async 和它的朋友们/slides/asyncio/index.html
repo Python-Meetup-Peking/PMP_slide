@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Asyncio 和它的朋友们</title>
+
+		<meta name="description" content="Asyncio 和它的朋友们">
+		<meta name="author" content="lilydjwg">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+                <link href="https://fonts.googleapis.com/css?family=IM+Fell+English" rel="stylesheet"> 
+		<link rel="stylesheet" href="css/asyncio.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+<section>
+  <h3 style="font-family: 迷你简启体; color: gray;">Asyncio 和它的朋友们</h3>
+
+  <p>
+    <small>by <a href="https://blog.lilydjwg.me/">依云</a> / <a href="https://twitter.com/lilydjwg">@lilydjwg</a></small>
+  </p>
+</section>
+
+<section>
+  <h3>Asyncio 是干什么的</h3>
+  <ul>
+    <li class="fragment">异步网络操作</li>
+    <li class="fragment">并发</li>
+    <li class="fragment">协程</li>
+  </ul>
+</section>
+
+<section>
+  <p>Python 3.0 时代，标准库里的异步网络模块</p>
+  <ul class="mylist">
+    <li><span class="cross">✕</span> asyncio</li>
+    <li><span class="cross">✕</span> selectors</li>
+    <li><span class="check">✓</span> select <span class="fragment" style="color: yellow;">(非常底层)</span></li>
+  </ul>
+</section>
+
+<section>
+  <p>Python 3.0 时代，第三方异步网络库</p>
+  <ul class="mylist">
+    <li><span class="cross">✕</span> gevent</li>
+    <li><span class="cross">✕</span> Twisted</li>
+    <li><span class="check">✓</span> Tornado</li>
+  </ul>
+</section>
+
+<section>
+  <h3>Tornado</h3>
+  <ul>
+    <li class="fragment">HTTP 服务端和客户端</li>
+    <li class="fragment">3.0+: 子进程</li>
+    <li class="fragment">XMPP by me :-)</li>
+    <li class="fragment">motor, momoko, ...</li>
+    <li class="fragment gray">(我等啊等，等到花儿都开了)</li>
+  </ul>
+</section>
+
+<section data-background-image="images/tulip.png">
+  <!-- <img class="stretch" src="images/tulip.png" alt="tulip"/> -->
+</section>
+
+<section>
+  <h3>3.4 时代的 asyncio</h3>
+  <ul class="mylist">
+    <li class="fragment"><span class="check">✓</span> TCP 连接</li>
+    <li class="fragment"><span class="check">✓</span> 子进程</li>
+    <li class="fragment"><span class="cross">✕</span> HTTP</li>
+    <li class="fragment"><span class="cross">✕</span> 数据库</li>
+    <li class="fragment"><span class="cross">✕</span> ...</li>
+  </ul>
+</section>
+
+<section>
+  <h3>现在的 asyncio</h3>
+  <ul>
+    <li class="fragment">aiohttp!</li>
+    <li class="fragment">aiodns!</li>
+    <li class="fragment">aioredis!</li>
+    <li class="fragment">aiopg / asyncpg!</li>
+  </ul>
+</section>
+
+<section>
+  <h3>现在的 asyncio</h3>
+  <img src="images/aio-libs.png" alt="aio-libs" class="stretch"/>
+</section>
+
+<section>
+  <h3>Tornado?</h3>
+  <pre><code data-trim class="python">
+from tornado.platform.asyncio import (
+  AsyncIOMainLoop, to_asyncio_future
+)
+
+AsyncIOMainLoop().install()
+  </code></pre>
+</section>
+
+<section>
+  <h3>Twisted?</h3>
+  <pre><code data-trim class="python">
+from twisted.internet import asyncioreactor
+
+asyncioreactor.install()
+  </code></pre>
+</section>
+
+<section>
+  <h3>uvloop?</h3>
+  <p><small>Yes, it's much faster!</small></p>
+  <pre><code data-trim class="python">
+import uvloop
+
+policy = uvloop.EventLoopPolicy()
+asyncio.set_event_loop_policy(policy)
+  </code></pre>
+</section>
+
+<section>
+  <h3>Tokio from the Rust language?</h3>
+  <pre><code data-trim class="python">
+import tokio
+
+policy = tokio.EventLoopPolicy()
+asyncio.set_event_loop_policy(policy)
+  </code></pre>
+</section>
+
+<section>
+  <h3>术语</h3>
+  <ul>
+    <li class="fragment">policy: 生成和管理 event loop</li>
+    <li class="fragment">transport: 发送和接收字节数据</li>
+    <li class="fragment">protocol: 协议编解码</li>
+    <li class="fragment">future: 封装异步执行任务</li>
+    <li class="fragment">task: 独立执行的 future</li>
+    <li class="fragment" style="color: lightgreen;">coroutine: 就是协程啦！</li>
+  </ul>
+</section>
+
+<section>
+  <h3>coroutine</h3>
+  3.5+:
+  <pre><code class="python" data-trim>
+async def coro():
+  ...
+  res = await ...
+  ...
+  </code></pre>
+
+  3.3 &amp; 3.4:
+  <pre><code class="python" data-trim>
+@asyncio.coroutine
+def coro():
+  ...
+  res = yield from ...
+  ...
+  </code></pre>
+</section>
+
+<section>
+  <h3>asynchronous generator!</h3>
+  3.6+
+  <pre><code class="python" data-trim>
+from aiohttputils import ClientBase # winterpy
+
+class SomeSite(ClientBase):
+  ...
+  async def iter_questions(self):
+    page = 1
+    while True:
+      qs = await self.get_questions(page=page)
+      for q in qs:
+        yield q
+      page += 1
+  </code></pre>
+</section>
+
+<section>
+  <h3>async for &amp; async comprehensions!</h3>
+  <pre><code class="python" data-trim>
+async for q in site.iter_questions():
+  print(f"{q['id']:5}: {q['title']} by {q['author']}")
+
+mine = [q async for q in site.iter_questions() if q['author'] == me]
+  </code></pre>
+</section>
+
+<section>
+  <h3>async with!</h3>
+  <pre><code class="python" data-trim>
+async def fetch(session, url):
+    with async_timeout.timeout(10):
+        async with session.get(url) as response:
+            return await response.text()
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        html = await fetch(session, 'http://python.org')
+        print(html)
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+  </code></pre>
+</section>
+
+<section>
+  <h3>并发！</h3>
+  <pre><code class="python" data-trim data-noescape>
+#!/usr/bin/env python3
+
+from math import log10
+import asyncio
+import aiohttp
+
+async def fetch(session, url):
+  async with session.get(url) as response:
+    return await response.json()
+
+async def main(loop):
+  async with aiohttp.ClientSession(loop=loop) as session:
+    tree = await fetch(session, 'https://api.github.com/repos/cljsjs/packages/git/trees/master')
+    modules = [x['path'] for x in tree['tree'] if x['type'] == 'tree']
+    <mark>futures = [fetch(session, 'https://api.npmjs.org/downloads/point/last-month/' + m)
+               for m in modules]
+    result, _ = await asyncio.wait(futures, loop=loop)</mark>
+    result = [r.result() for r in result]
+    result = [r for r in result if 'downloads' in r]
+    result.sort(reverse=True, key=lambda x: x['downloads'])
+
+    result = result[:100]
+    name_width = max(len(x['package']) for x in result)
+    count_width = max(int(log10(x['downloads'])) for x in result
+                      if x['downloads'] &gt; 0) + 1
+    fmt = 'Downloads: %{0}s  Count: %{1}d'.format(name_width, count_width)
+
+    for r in result:
+      print(fmt % (r['package'], r['downloads']))
+
+if __name__ == '__main__':
+  loop = asyncio.get_event_loop()
+  loop.run_until_complete(main(loop))
+  </code></pre>
+</section>
+
+<section>
+  <h3>并发！</h3>
+  <img class="stretch" src="images/npm-top100.png" alt="npm-top100"/>
+</section>
+
+<section data-background-image="images/doge.png">
+  <!-- <img class="stretch" src="images/doge.png" alt="doge"/> -->
+</section>
+
+<section>
+  <h1 style="font-style: italic; font-family: 'IM FELL English';">Thanks!</h1>
+  <h2 style="font-style: italic; font-family: 'IM FELL English';">Q&amp;A</h2>
+</section>
+
+
+
+
+
+
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+        <script type="text/javascript" src="js/lilydjwg.js"></script>
+
+	</body>
+</html>
