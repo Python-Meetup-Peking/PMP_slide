@@ -4,7 +4,7 @@
 
 这里是 Python 北京开发者活动相关 PPT 共有三部分
 
-##  async 和它的朋友们 主讲:依云
+##  asyncio 和它的朋友们 主讲:依云
 
 简介: Python 3.4 标准库增加了 asyncio。Python 3.5 增加了 async/await 关键字。三年时光匆匆而过，2.7 用户逐渐迁移。如今 asyncio 及其周边堪用否？本演讲带领大家浏览 asyncio 的功能特性，我们能用它来做什么，它给整个社区又带来了什么。 
 
